@@ -1,0 +1,81 @@
+{
+  "description": "Sample SMS messages that farmers receive for different sensor conditions",
+  "message_examples": {
+    "high_temperature_fan_on": {
+      "trigger": "Temperature >= 30°C",
+      "message": "🌡️ HIGH TEMP ALERT: 32.1°C detected! Fan turned ON automatically. Red warning light activated. Please check your crops immediately.",
+      "urgency": "High",
+      "action_required": "Check crops and ensure proper ventilation"
+    },
+    "temperature_normalized": {
+      "trigger": "Temperature returns to normal range after being high",
+      "message": "✅ TEMP NORMALIZED: 25.0°C. Fan turned OFF automatically. Yellow indicator shows normal conditions.",
+      "urgency": "Low",
+      "action_required": "None - system automatically adjusted"
+    },
+    "low_temperature": {
+      "trigger": "Temperature < 15°C",
+      "message": "❄️ LOW TEMP ALERT: 12.3°C detected! Fan turned OFF. Blue indicator active. Consider protective measures for your crops.",
+      "urgency": "High",
+      "action_required": "Consider heating or crop protection"
+    },
+    "gas_alert_critical": {
+      "trigger": "Gas level > 300",
+      "message": "🚨 GAS ALERT! Dangerous gas levels detected (450/1023). IMMEDIATE ACTION REQUIRED! Check for gas leaks, ensure ventilation, and evacuate if necessary.",
+      "urgency": "Critical",
+      "action_required": "Immediate evacuation and safety check"
+    },
+    "gas_normalized": {
+      "trigger": "Gas level returns to safe range",
+      "message": "✅ Gas levels normalized (150/1023). Safe to resume normal operations.",
+      "urgency": "Low",
+      "action_required": "Resume normal activities"
+    },
+    "multiple_issues_critical": {
+      "trigger": "Multiple sensors show critical readings",
+      "message": "🚨 CRITICAL ALERT! Multiple issues detected - Temp: 35.8°C, Gas: 520, Humidity: 85.0%. Immediate attention required!",
+      "urgency": "Critical",
+      "action_required": "Emergency response needed"
+    },
+    "high_priority_warning": {
+      "trigger": "High priority conditions detected",
+      "message": "⚠️ HIGH PRIORITY: Environmental conditions need attention - Temp: 32.0°C, Gas: 280. Please check your setup.",
+      "urgency": "High",
+      "action_required": "Check and adjust environmental controls"
+    },
+    "test_message": {
+      "trigger": "Manual test SMS",
+      "message": "🧪 Test message from Arduino Sensor System at 2024-01-15 14:30:00. SMS alerts are working correctly!",
+      "urgency": "Test",
+      "action_required": "Verify SMS reception"
+    }
+  },
+  "message_features": {
+    "farmer_friendly_language": "Messages use simple, clear language suitable for farmers",
+    "emoji_indicators": "Visual indicators help quickly identify issue type",
+    "actionable_information": "Each message includes specific temperature/gas readings",
+    "urgency_levels": ["Low", "Medium", "High", "Critical"],
+    "spam_prevention": "State tracking prevents duplicate alerts",
+    "cooldown_periods": {
+      "gas_alerts": "5 minutes minimum between gas alerts",
+      "temperature_changes": "Only sent when fan/LED state actually changes",
+      "priority_escalation": "Only when priority increases to high/critical"
+    }
+  },
+  "typical_alert_scenarios": {
+    "morning_startup": [
+      "✅ Temperature normal: 22.5°C. All systems operating normally."
+    ],
+    "hot_day_progression": [
+      "🌡️ HIGH TEMP ALERT: 30.5°C detected! Fan turned ON automatically.",
+      "✅ TEMP NORMALIZED: 28.0°C. Fan turned OFF automatically."
+    ],
+    "gas_leak_incident": [
+      "🚨 GAS ALERT! Dangerous gas levels detected (450/1023). IMMEDIATE ACTION REQUIRED!",
+      "✅ Gas levels normalized (150/1023). Safe to resume normal operations."
+    ],
+    "extreme_weather_event": [
+      "🚨 CRITICAL ALERT! Multiple issues detected - Temp: 35.8°C, Gas: 520, Humidity: 85.0%. Immediate attention required!"
+    ]
+  }
+}

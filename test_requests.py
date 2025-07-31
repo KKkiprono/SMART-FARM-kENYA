@@ -119,6 +119,45 @@ def send_sensor_data(scenario_name: str, data: Dict[str, Any]) -> bool:
         print(f"❌ Request failed with error: {e}")
         return False
 
+def test_sms_endpoints():
+    """Test SMS-related endpoints"""
+    print("\n--- Testing SMS Endpoints ---")
+    
+    # Test SMS status
+    try:
+        print("\nTesting SMS status endpoint...")
+        response = requests.get(f"{SERVER_URL}/sms/status", timeout=10)
+        
+        if response.status_code == 200:
+            print("✅ SMS status endpoint working")
+            status_data = response.json()
+            print(f"SMS Service Status: {json.dumps(status_data['sms_service'], indent=2)}")
+        else:
+            print(f"❌ SMS status failed with status: {response.status_code}")
+            
+    except requests.exceptions.RequestException as e:
+        print(f"❌ SMS status failed with error: {e}")
+    
+    # Test SMS test message (optional - uncomment if you want to send test SMS)
+    # try:
+    #     print("\nTesting test SMS endpoint...")
+    #     response = requests.post(f"{SERVER_URL}/sms/test", timeout=30)
+    #     
+    #     if response.status_code == 200:
+    #         print("✅ Test SMS sent successfully")
+    #         result = response.json()
+    #         print(f"SMS Result: {json.dumps(result, indent=2)}")
+    #     else:
+    #         print(f"⚠️ Test SMS failed with status: {response.status_code}")
+    #         try:
+    #             error_info = response.json()
+    #             print(f"Error: {error_info.get('error', 'Unknown')}")
+    #         except:
+    #             print(f"Raw response: {response.text}")
+    #             
+    # except requests.exceptions.RequestException as e:
+    #     print(f"❌ Test SMS failed with error: {e}")
+
 def test_invalid_data():
     """Test with invalid data to verify error handling"""
     print("\n--- Testing Invalid Data Scenarios ---")
@@ -198,6 +237,9 @@ def main():
             success_count += 1
         time.sleep(1)  # Small delay between requests
     
+    # Test SMS endpoints
+    test_sms_endpoints()
+    
     # Test invalid data scenarios
     test_invalid_data()
     
@@ -211,9 +253,16 @@ def main():
         print("⚠️  Some tests failed. Check the server logs for details.")
     
     print("\n📝 To test manually with curl:")
+    print("\n# Submit sensor data:")
     print("curl -X POST http://localhost:5000/submit-data \\")
     print("  -H 'Content-Type: application/json' \\")
     print("  -d '{\"temperature\": 25.0, \"humidity\": 50.0, \"light_intensity\": 400, \"gas_level\": 120}'")
+    
+    print("\n# Check SMS status:")
+    print("curl -X GET http://localhost:5000/sms/status")
+    
+    print("\n# Send test SMS (uncomment in test_sms_endpoints() first):")
+    print("curl -X POST http://localhost:5000/sms/test")
 
 if __name__ == "__main__":
     main()

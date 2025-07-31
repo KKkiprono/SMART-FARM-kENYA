@@ -4,6 +4,7 @@ from datetime import datetime
 import json
 from config import Config
 from gemini_utils import GeminiProcessor
+from sms_utils import SMSManager
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -19,8 +20,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Initialize Gemini processor
+# Initialize Gemini processor and SMS manager
 gemini_processor = GeminiProcessor()
+sms_manager = SMSManager()
 
 @app.route('/submit-data', methods=['POST'])
 def submit_data():
@@ -88,6 +90,21 @@ def submit_data():
             # Log AI decision
             logger.info(f"AI Decision: {ai_decision}")
             
+            # Send SMS alerts based on AI decision
+            sms_result = {"success": False, "reason": "SMS disabled"}
+            if Config.SMS_ENABLED:
+                try:
+                    sms_result = sms_manager.send_farmer_alert(ai_decision, {
+                        'temperature': temperature,
+                        'humidity': humidity,
+                        'light_intensity': light_intensity,
+                        'gas_level': gas_level
+                    })
+                    logger.info(f"SMS Alert Result: {sms_result}")
+                except Exception as e:
+                    logger.error(f"SMS alert failed: {e}")
+                    sms_result = {"success": False, "error": str(e)}
+            
             # Return the decision
             return jsonify({
                 "status": "success",
@@ -98,7 +115,8 @@ def submit_data():
                     "light_intensity": light_intensity,
                     "gas_level": gas_level
                 },
-                "decision": ai_decision
+                "decision": ai_decision,
+                "sms_alert": sms_result
             }), 200
             
         except Exception as e:
@@ -118,15 +136,56 @@ def health_check():
         "service": "Arduino Sensor Data Processor"
     }), 200
 
+@app.route('/sms/test', methods=['POST'])
+def send_test_sms():
+    """Send a test SMS message"""
+    try:
+        if not Config.SMS_ENABLED:
+            return jsonify({"error": "SMS service is disabled"}), 400
+        
+        result = sms_manager.send_test_message()
+        
+        if result['success']:
+            return jsonify({
+                "status": "success",
+                "message": "Test SMS sent successfully",
+                "details": result
+            }), 200
+        else:
+            return jsonify({
+                "status": "failed",
+                "error": result.get('error', 'Unknown error'),
+                "details": result
+            }), 500
+            
+    except Exception as e:
+        logger.error(f"Test SMS endpoint error: {e}")
+        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+
+@app.route('/sms/status', methods=['GET'])
+def sms_status():
+    """Get SMS service status"""
+    try:
+        status = sms_manager.get_status()
+        return jsonify({
+            "sms_service": status,
+            "timestamp": datetime.now().isoformat()
+        }), 200
+    except Exception as e:
+        logger.error(f"SMS status endpoint error: {e}")
+        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+
 @app.route('/', methods=['GET'])
 def home():
     """Home endpoint with API information"""
     return jsonify({
-        "service": "Arduino Sensor Data Processor",
-        "version": "1.0.0",
+        "service": "Arduino Sensor Data Processor with SMS Alerts",
+        "version": "2.0.0",
         "endpoints": {
             "/submit-data": "POST - Submit sensor data for AI processing",
             "/health": "GET - Health check",
+            "/sms/test": "POST - Send test SMS message",
+            "/sms/status": "GET - Get SMS service status",
             "/": "GET - API information"
         },
         "expected_data_format": {
@@ -134,6 +193,11 @@ def home():
             "humidity": "float (0-100%)",
             "light_intensity": "int (0-1023)",
             "gas_level": "int (0-1023)"
+        },
+        "sms_features": {
+            "enabled": Config.SMS_ENABLED,
+            "sandbox_mode": Config.AT_SANDBOX,
+            "alerts": ["temperature_changes", "gas_alerts", "priority_escalation"]
         }
     }), 200
 
