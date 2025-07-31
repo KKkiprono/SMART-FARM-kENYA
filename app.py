@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask, request, jsonify
 import logging
 from datetime import datetime
@@ -5,6 +8,7 @@ import json
 from config import Config
 from gemini_utils import GeminiProcessor
 from sms_utils import SMSManager
+import os
 
 # Initialize Flask app
 app = Flask(__name__)

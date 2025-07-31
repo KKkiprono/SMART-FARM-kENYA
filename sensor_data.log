@@ -1,0 +1,11 @@
+2025-07-31 18:36:20,984 - INFO - Initialized Gemini processor with model: gemini-pro
+2025-07-31 18:41:01,741 - INFO - Initialized Gemini processor with model: gemini-pro
+2025-07-31 18:46:16,921 - INFO - Initialized Gemini processor with model: gemini-pro
+2025-07-31 18:46:16,922 - INFO - SMS service initialized for live environment
+2025-07-31 18:46:16,922 - INFO - No previous SMS state found - starting fresh
+2025-07-31 18:46:16,958 - INFO - Starting Arduino Sensor Data Processor Flask App
+2025-07-31 18:46:17,014 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.16.104.131:5000
+2025-07-31 18:46:17,020 - INFO - [33mPress CTRL+C to quit[0m

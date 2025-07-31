@@ -2,7 +2,7 @@ import google.generativeai as genai
 import json
 import logging
 from typing import Dict, Any, Optional
-from config import Config
+from config import Config # Assuming you need to import something from sms_utils.py
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +27,7 @@ class GeminiProcessor:
         )
         
         logger.info(f"Initialized Gemini processor with model: {Config.GEMINI_MODEL}")
+        print("GEMINI_API_KEY from Config:", Config.GEMINI_API_KEY)
     
     def _create_system_prompt(self) -> str:
         """Create the system prompt for sensor data analysis"""
@@ -178,7 +179,7 @@ Provide your response as a JSON object following the specified format."""
         gas_alert = gas_level > Config.GAS_ALERT_THRESHOLD
         if gas_alert:
             action = "trigger gas alert"
-        
+            
         # Determine priority
         priority = self._get_priority(sensor_data)
         

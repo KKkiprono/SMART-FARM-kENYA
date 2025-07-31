@@ -1,54 +1,52 @@
 import os
-from dataclasses import dataclass
-from typing import Dict, Any
 from dotenv import load_dotenv
+from typing import Dict, Any
 
-# Load environment variables from .env file
 load_dotenv()
+print("DEBUG: GEMINI_API_KEY from .env =", os.getenv('GEMINI_API_KEY'))
 
-@dataclass
 class Config:
     """Configuration class for the Arduino Sensor Data Processor"""
-    
+
     # Flask Configuration
-    FLASK_HOST: str = os.getenv('FLASK_HOST', '0.0.0.0')
-    FLASK_PORT: int = int(os.getenv('FLASK_PORT', '5000'))
-    DEBUG: bool = os.getenv('DEBUG', 'False').lower() == 'true'
-    
+    FLASK_HOST = os.getenv('FLASK_HOST', '0.0.0.0')
+    FLASK_PORT = int(os.getenv('FLASK_PORT', '5000'))
+    DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+
     # Google Gemini API Configuration
-    GEMINI_API_KEY: str = os.getenv('GEMINI_API_KEY', '')
-    GEMINI_MODEL: str = os.getenv('GEMINI_MODEL', 'gemini-pro')
-    
+    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
+    GEMINI_MODEL = os.getenv('GEMINI_MODEL', 'gemini-pro')
+
     # Temperature Thresholds (°C)
-    TEMP_HOT_THRESHOLD: float = float(os.getenv('TEMP_HOT_THRESHOLD', '30.0'))
-    TEMP_COLD_THRESHOLD: float = float(os.getenv('TEMP_COLD_THRESHOLD', '15.0'))
-    
+    TEMP_HOT_THRESHOLD = float(os.getenv('TEMP_HOT_THRESHOLD', '30.0'))
+    TEMP_COLD_THRESHOLD = float(os.getenv('TEMP_COLD_THRESHOLD', '15.0'))
+
     # Gas Level Threshold
-    GAS_ALERT_THRESHOLD: int = int(os.getenv('GAS_ALERT_THRESHOLD', '300'))
-    
+    GAS_ALERT_THRESHOLD = int(os.getenv('GAS_ALERT_THRESHOLD', '300'))
+
     # Light Intensity Thresholds
-    LIGHT_BRIGHT_THRESHOLD: int = int(os.getenv('LIGHT_BRIGHT_THRESHOLD', '700'))
-    LIGHT_DIM_THRESHOLD: int = int(os.getenv('LIGHT_DIM_THRESHOLD', '200'))
-    
+    LIGHT_BRIGHT_THRESHOLD = int(os.getenv('LIGHT_BRIGHT_THRESHOLD', '700'))
+    LIGHT_DIM_THRESHOLD = int(os.getenv('LIGHT_DIM_THRESHOLD', '200'))
+
     # Humidity Thresholds (%)
-    HUMIDITY_HIGH_THRESHOLD: float = float(os.getenv('HUMIDITY_HIGH_THRESHOLD', '70.0'))
-    HUMIDITY_LOW_THRESHOLD: float = float(os.getenv('HUMIDITY_LOW_THRESHOLD', '30.0'))
-    
+    HUMIDITY_HIGH_THRESHOLD = float(os.getenv('HUMIDITY_HIGH_THRESHOLD', '70.0'))
+    HUMIDITY_LOW_THRESHOLD = float(os.getenv('HUMIDITY_LOW_THRESHOLD', '30.0'))
+
     # AI Processing Configuration
-    AI_TEMPERATURE: float = float(os.getenv('AI_TEMPERATURE', '0.3'))  # Lower = more deterministic
-    MAX_OUTPUT_TOKENS: int = int(os.getenv('MAX_OUTPUT_TOKENS', '256'))
-    
+    AI_TEMPERATURE = float(os.getenv('AI_TEMPERATURE', '0.3'))
+    MAX_OUTPUT_TOKENS = int(os.getenv('MAX_OUTPUT_TOKENS', '256'))
+
     # Africa's Talking SMS Configuration
-    AT_USERNAME: str = os.getenv('AT_USERNAME', '')
-    AT_API_KEY: str = os.getenv('AT_API_KEY', '')
-    AT_SENDER_ID: str = os.getenv('AT_SENDER_ID', '')  # Optional
-    AT_RECIPIENT_PHONE: str = os.getenv('AT_RECIPIENT_PHONE', '')  # Format: +254712345678
-    AT_SANDBOX: bool = os.getenv('AT_SANDBOX', 'True').lower() == 'true'
-    
+    AT_USERNAME = os.getenv('AT_USERNAME', '')
+    AT_API_KEY = os.getenv('AT_API_KEY', '')
+    AT_SENDER_ID = os.getenv('AT_SENDER_ID', '')
+    AT_RECIPIENT_PHONE = os.getenv('AT_RECIPIENT_PHONE', '')
+    AT_SANDBOX = os.getenv('AT_SANDBOX', 'True').lower() == 'true'
+
     # SMS Alert Configuration
-    GAS_ALERT_COOLDOWN: int = int(os.getenv('GAS_ALERT_COOLDOWN', '300'))  # 5 minutes
-    SMS_ENABLED: bool = os.getenv('SMS_ENABLED', 'True').lower() == 'true'
-    
+    GAS_ALERT_COOLDOWN = int(os.getenv('GAS_ALERT_COOLDOWN', '300'))
+    SMS_ENABLED = os.getenv('SMS_ENABLED', 'True').lower() == 'true'
+
     @classmethod
     def validate_config(cls) -> Dict[str, Any]:
         """Validate configuration and return status"""

@@ -1,6 +1,7 @@
 import africastalking
 import logging
 import json
+import os
 from datetime import datetime
 from typing import Dict, Any, Optional
 from config import Config
@@ -13,20 +14,18 @@ class SMSManager:
     def __init__(self):
         """Initialize the SMS manager with Africa's Talking credentials"""
         # Initialize Africa's Talking
-        if not Config.AT_USERNAME or not Config.AT_API_KEY:
-            logger.warning("Africa's Talking credentials not configured - SMS functionality disabled")
+        try:
+            africastalking.initialize(
+                username=os.getenv("AT_USERNAME"),
+                api_key=os.getenv("AT_API_KEY")
+            )
+            self.sms = africastalking.SMS
+            self.sms_enabled = True
+            logger.info(f"SMS service initialized for {'sandbox' if Config.AT_SANDBOX else 'live'} environment")
+        except Exception as e:
+            logger.error(f"Failed to initialize Africa's Talking SMS: {e}")
             self.sms_enabled = False
             self.sms = None
-        else:
-            try:
-                africastalking.initialize(Config.AT_USERNAME, Config.AT_API_KEY)
-                self.sms = africastalking.SMS
-                self.sms_enabled = True
-                logger.info(f"SMS service initialized for {'sandbox' if Config.AT_SANDBOX else 'live'} environment")
-            except Exception as e:
-                logger.error(f"Failed to initialize Africa's Talking SMS: {e}")
-                self.sms_enabled = False
-                self.sms = None
         
         # State tracking to prevent spam
         self.last_state = {}
