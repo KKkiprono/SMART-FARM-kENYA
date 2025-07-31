@@ -1,0 +1,35 @@
+{
+  "description": "Sample Arduino sensor data payloads for testing",
+  "examples": {
+    "normal_conditions": {
+      "temperature": 22.5,
+      "humidity": 45.0,
+      "light_intensity": 400,
+      "gas_level": 120
+    },
+    "hot_conditions": {
+      "temperature": 32.1,
+      "humidity": 65.2,
+      "light_intensity": 800,
+      "gas_level": 180
+    },
+    "cold_conditions": {
+      "temperature": 12.3,
+      "humidity": 80.5,
+      "light_intensity": 150,
+      "gas_level": 95
+    },
+    "gas_alert": {
+      "temperature": 25.0,
+      "humidity": 55.0,
+      "light_intensity": 600,
+      "gas_level": 450
+    },
+    "extreme_conditions": {
+      "temperature": 35.8,
+      "humidity": 85.0,
+      "light_intensity": 950,
+      "gas_level": 520
+    }
+  }
+}
